@@ -47,6 +47,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -66,7 +67,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
     val searchedNotes by viewModel.searchedNotes.collectAsState()
 
 
-    val (dialogOpen, setDialogOpen) = remember {
+    var dialogOpen by remember {
         mutableStateOf(false)
     }
 
@@ -74,7 +75,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
         val (note, setNote) = remember {
             mutableStateOf("")
         }
-        Dialog(onDismissRequest = { setDialogOpen(false) }) {
+        Dialog(onDismissRequest = { dialogOpen = false }) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -109,7 +110,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
                             viewModel.addNote(
                                 NoteEntity(note = note),
                             )
-                            setDialogOpen(false)
+                            dialogOpen = false
                         }
                     },
 
@@ -130,7 +131,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
         floatingActionButton = {
             FloatingActionButton(
                 modifier = Modifier.size(65.dp),
-                onClick = { setDialogOpen(true) },
+                onClick = { dialogOpen = true },
                 contentColor = Color.White,
                 containerColor = MaterialTheme.colorScheme.secondary
             ) {
